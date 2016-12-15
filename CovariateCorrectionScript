@@ -1,0 +1,17 @@
+Covariate Correction Script
+
+Apollo <- read.csv("EverythingSwitched.csv", header = TRUE)
+a <- Apollo$PMI
+b <- Apollo$pH
+c <- Apollo$RIN
+
+for(i in 44:16358){
+
+y <- Apollo[,i]
+
+}
+
+fit <- lm(y~a+b+c, data = Apollo)
+fit.resid <- residuals(fit)
+plot(fit$residuals, y)
+
