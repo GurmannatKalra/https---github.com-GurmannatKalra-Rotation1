@@ -5,13 +5,8 @@ a <- Apollo$PMI
 b <- Apollo$pH
 c <- Apollo$RIN
 
+fit <- c()
 for(i in 44:16358){
 
-y <- Apollo[,i]
-
-}
-
-fit <- lm(y~a+b+c, data = Apollo)
-fit.resid <- residuals(fit)
-plot(fit$residuals, y)
-
+fit[i] <- residuals(lm(Apollo[,i]~a+b+c, data = Apollo))
+}Athena <- matrix(fit[i], 420, byrow = TRUE)write.csv(fit.resid, "CovariateCorrected.csv", row.names = FALSE)
