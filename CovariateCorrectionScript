@@ -1,3 +1,3 @@
 Covariate Correction Script
 
-Zeus <- read.csv(“EverythingSwitched.csv”, header = TRUE)Apollo <- Zeus[,1:42]Athena <- Zeus[,43:16358]	a <- Apollo$PMIb <- Apollo$pHc <- Apollo$RINArtemis = matrix(NA, 420, ncol(Athena), dimnames = list(Athena[,1]))for(i in 1:16316){fit <- (lm(Athena[,i]~a+b+c, data = Athena))fiter <- c(residuals(fit))Artemis[,i] = fiter}write.csv(Artemis, “CovariateCorrected.csv“, row.names = TRUE)
+Zeus <- read.csv(“EverythingSwitched.csv”, header = TRUE)Apollo <- Zeus[,1:42]Aphrodite <- Zeus[,43]Athena <- Zeus[,44:16358]	a <- Apollo$PMIb <- Apollo$pHc <- Apollo$RINArtemis = matrix(NA, 420, ncol(Athena))Aphrodite = as.matrix(Aphrodite)for(i in 1:16315){fit <- (lm(Athena[,i]~a+b+c, data = Athena))fiter <- c(residuals(fit))Artemis[,i] = fiter}Ares <- cbind2(Aphrodite, Artemis)write.csv(Ares, “CovariateCorrected.csv“, row.names = FALSE)

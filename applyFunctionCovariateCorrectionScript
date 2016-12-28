@@ -1,0 +1,3 @@
+Covariate Correction Script
+
+Zeus <- read.csv(“EverythingSwitched.csv”, header = TRUE)Apollo <- Zeus[,1:42]Aphrodite <- Zeus[,43]Athena <- Zeus[,44:16358]	a <- Apollo$PMIb <- Apollo$pHc <- Apollo$RINArtemis = data.matrix(Athena)Aphrodite = as.matrix(Aphrodite)form <- function(x) {residuals(lm(x~a+b+c))}Poseidon <- apply (Artemis, 2, form)Ares <- cbind2(Aphrodite, Poseidon)write.csv(Ares, “applyfunctionCovarianceCorrected.csv”, row.names = FALSE)
