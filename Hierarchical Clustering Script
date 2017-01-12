@@ -1,0 +1,15 @@
+Hierarchical Clustering Script
+
+HclustK1=10 # how many clusters do you want?
+
+custDIST=function(pmtx,distmeth)
+{
+if(distmeth=="corr"){dst=1-(cor(t(pmtx),use="pairwise.complete.obs"));dst=as.dist(dst);if(sum(is.na(dst))){print("setting NAs in corrMTX in custDIST to dst=1")};dst[is.na(dst)]=1;return(dst)}
+if(distmeth!="corr"){return(dist(pmtx,method=distmeth))}
+}
+
+HclustLinkMeth="complete" # linkage method for how clusters are defined
+HclustDist="corr" # distance metric - most commonly "corr" for correlation, but can be any type of distance that the R function "dist()" can take
+distt1=custDIST(pmtx=exprsMTX,distmeth=HclustDist)
+clust1=hclust(d=distt1,method=HclustLinkMeth)
+cut1=cutree(clust1,k=HclustK1)
