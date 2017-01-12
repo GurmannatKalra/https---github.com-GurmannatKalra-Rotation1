@@ -1,5 +1,13 @@
 Hierarchical Clustering Script
 
+setwd("~/Desktop/Ament")
+Ares <- read.csv("applyfunctionCovarianceCorrected.csv", header = TRUE)
+rownames(Ares) <- Ares[,1]
+Ares[,1] <- NULL
+Ares <- as.matrix(Ares)
+
+Pluto <- t(Ares)
+
 HclustK1=10 # how many clusters do you want?
 
 custDIST=function(pmtx,distmeth)
@@ -10,6 +18,37 @@ if(distmeth!="corr"){return(dist(pmtx,method=distmeth))}
 
 HclustLinkMeth="complete" # linkage method for how clusters are defined
 HclustDist="corr" # distance metric - most commonly "corr" for correlation, but can be any type of distance that the R function "dist()" can take
-distt1=custDIST(pmtx=exprsMTX,distmeth=HclustDist)
+distt1=custDIST(pmtx=Pluto,distmeth=HclustDist)
 clust1=hclust(d=distt1,method=HclustLinkMeth)
 cut1=cutree(clust1,k=HclustK1)
+
+c3genes=rownames(Pluto)[cut1==3] #names of genes in cluster 3
+
+
+moretraits <- read.csv("GSE71620_series_matrixOri.csv")moretraitsgood <- t(moretraits)
+construct1 = moretraitsgood[,c(70,44)]
+construct1[,2] <- gsub(".*:", "", construct1[,2])
+rownames(construct1) <- NULL
+colnames(construct1) <- NULL
+colnames(construct1) = construct1[1,]
+construct1 <- construct1[-c(1),]
+colnames(construct1) <- c("Sample", "TOD")
+
+
+#X is the cluster you are interested in
+
+clustMNsMTX=matrix(nrow=HclustK1,ncol=dim(Pluto)[2])
+for(X in 1:HclustK1)
+{
+clustMTX=Pluto[cut1==X,]
+clustMTX.Z=sweep(clustMTX,1,STATS=rowMeans(clustMTX),FUN="-")
+clustMTX.Z=sweep(clustMTX.Z,1,STATS=apply(clustMTX.Z,1,sd),FUN="/")
+clustMNsMTX[X,]=colMeans(clustMTX.Z)
+}
+
+construct2 <- t(construct1)
+colnames(construct2) <- construct2[1,]
+construct2 <- construct2[-c(1),]
+construct3 <- rbind(construct2, clustMNsMTX)
+
+plot(construct3[1,], construct3[2,])
